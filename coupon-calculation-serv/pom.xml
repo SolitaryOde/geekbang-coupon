@@ -12,6 +12,7 @@
     <packaging>pom</packaging>
     <modules>
         <module>coupon-calculation-api</module>
+        <module>coupon-calculation-biz</module>
     </modules>
 
     <properties>
