@@ -4,13 +4,13 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>com.geekbang</groupId>
-		<artifactId>coupon-calculation-serv</artifactId>
+		<artifactId>coupon-client</artifactId>
 		<version>0.0.1-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<artifactId>coupon-calculation-biz</artifactId>
+	<artifactId>coupon-client-biz</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>coupon-calculation-biz</name>
+	<name>coupon-client-biz</name>
 
 	<properties>
 		<maven.compiler.source>17</maven.compiler.source>
@@ -21,7 +21,17 @@
 	<dependencies>
 		<dependency>
 			<groupId>${project.groupId}</groupId>
-			<artifactId>coupon-calculation-api</artifactId>
+			<artifactId>coupon-client-repo</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>coupon-template-biz</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>coupon-calculation-biz</artifactId>
 			<version>${project.version}</version>
 		</dependency>
 
@@ -31,8 +41,28 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-starter-actuator</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-test</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.springframework.boot</groupId>
+				<artifactId>spring-boot-maven-plugin</artifactId>
+				<executions>
+					<execution>
+						<goals>
+							<goal>repackage</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+		</plugins>
+	</build>
 </project>
