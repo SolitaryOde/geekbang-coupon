@@ -1,5 +1,13 @@
-![输入图片说明](https://foruda.gitee.com/images/1663006749965065038/fca433db_7960656.png "屏幕截图")
+项目从Spring Boot开始，逐渐过渡到Spring Cloud完全体。GitHub里每一个文件夹都包含了一个完整的组件集成过程
 
-第一个阶段使用 Nacos、Loadbalancer 和 OpenFeign 实现了跨服务的调用；
-第二阶段使用 Sentinel、Nacos Config 和 Sleuth 实现了服务容错、配置管理和分布式链路追踪；
-第三阶段使用 Gateway、Stream 和 Seata 实现了微服务网关、消息事件驱动和分布式事务。
+
+实战项目所选用的Spring Cloud组件如下：
+
+服务治理：Nacos
+负载均衡：Loadbalancer
+服务间调用：OpenFeign
+熔断降级+流量整形：Sentinel
+分布式配置中心：Nacos Config
+分布式事务：Seata
+调用链追踪：Sleuth + Zipkin + ELK
+事件驱动：Stream

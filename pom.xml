@@ -17,6 +17,7 @@
 		<module>coupon-template-serv</module>
         <module>coupon-calculation-serv</module>
         <module>coupon-client</module>
+        <module>middleware</module>
     </modules>
 
 	<properties>
