@@ -32,5 +32,5 @@ public class ShoppingCart {
     private List<CouponInfo> couponInfos;
 
     @NotNull
-    private Long userId;
+    private Long customerId;
 }

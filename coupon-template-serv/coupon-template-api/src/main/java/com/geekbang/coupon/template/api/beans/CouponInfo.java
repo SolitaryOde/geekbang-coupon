@@ -21,7 +21,7 @@ public class CouponInfo {
 
     private Long templateId;
 
-    private Long userId;
+    private Long customerId;
 
     private Long shopId;
 

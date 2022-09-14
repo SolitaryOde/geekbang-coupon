@@ -29,5 +29,5 @@ public class SimulationOrder {
     private List<CouponInfo> couponInfos;
 
     @NotNull
-    private Long userId;
+    private Long customerId;
 }
