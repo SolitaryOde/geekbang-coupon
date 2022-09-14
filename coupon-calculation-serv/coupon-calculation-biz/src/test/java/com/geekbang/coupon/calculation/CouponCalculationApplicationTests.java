@@ -1,4 +1,4 @@
-package com.geekgang.coupon.calculation;
+package com.geekbang.coupon.calculation;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

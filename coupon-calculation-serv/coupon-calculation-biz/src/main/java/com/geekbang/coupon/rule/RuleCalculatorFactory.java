@@ -1,7 +1,7 @@
-package com.geekgang.coupon.rule;
+package com.geekbang.coupon.rule;
 
 import com.geekbang.coupon.enums.CouponType;
-import com.geekgang.coupon.rule.calculator.*;
+import com.geekbang.coupon.rule.calculator.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.ObjectUtils;

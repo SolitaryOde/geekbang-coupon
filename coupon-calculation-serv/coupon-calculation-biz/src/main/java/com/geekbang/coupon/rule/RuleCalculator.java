@@ -1,4 +1,4 @@
-package com.geekgang.coupon.rule;
+package com.geekbang.coupon.rule;
 
 import com.geekbang.coupon.beans.ShoppingCart;
 

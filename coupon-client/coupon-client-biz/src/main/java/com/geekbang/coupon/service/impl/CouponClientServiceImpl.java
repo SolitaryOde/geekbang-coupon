@@ -5,7 +5,7 @@ import com.geekbang.coupon.repository.entity.Coupon;
 import com.geekbang.coupon.beans.ShoppingCart;
 import com.geekbang.coupon.beans.SimulationOrder;
 import com.geekbang.coupon.beans.SimulationResponse;
-import com.geekgang.coupon.service.CouponCalculationService;
+import com.geekbang.coupon.service.CouponCalculationService;
 import com.geekbang.coupon.beans.RequestCoupon;
 import com.geekbang.coupon.beans.SearchCoupon;
 import com.geekbang.coupon.enumes.CouponStatus;

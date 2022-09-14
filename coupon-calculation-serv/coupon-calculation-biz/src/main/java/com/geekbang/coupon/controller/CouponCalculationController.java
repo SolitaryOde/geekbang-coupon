@@ -1,9 +1,9 @@
-package com.geekgang.coupon.controller;
+package com.geekbang.coupon.controller;
 
 import com.geekbang.coupon.beans.ShoppingCart;
 import com.geekbang.coupon.beans.SimulationOrder;
 import com.geekbang.coupon.beans.SimulationResponse;
-import com.geekgang.coupon.service.CouponCalculationService;
+import com.geekbang.coupon.service.CouponCalculationService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.PostMapping;

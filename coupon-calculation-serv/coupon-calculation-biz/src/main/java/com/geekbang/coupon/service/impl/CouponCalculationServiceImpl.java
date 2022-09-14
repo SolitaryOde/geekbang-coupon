@@ -1,4 +1,4 @@
-package com.geekgang.coupon.service.impl;
+package com.geekbang.coupon.service.impl;
 
 import com.geekbang.coupon.beans.ShoppingCart;
 import com.geekbang.coupon.beans.SimulationOrder;
@@ -6,9 +6,9 @@ import com.geekbang.coupon.beans.SimulationResponse;
 import com.geekbang.coupon.beans.CouponInfo;
 import com.geekbang.coupon.beans.CouponTemplateInfo;
 import com.geekbang.coupon.enums.CouponType;
-import com.geekgang.coupon.rule.RuleCalculator;
-import com.geekgang.coupon.rule.RuleCalculatorFactory;
-import com.geekgang.coupon.service.CouponCalculationService;
+import com.geekbang.coupon.rule.RuleCalculator;
+import com.geekbang.coupon.rule.RuleCalculatorFactory;
+import com.geekbang.coupon.service.CouponCalculationService;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;

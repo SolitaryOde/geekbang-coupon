@@ -1,4 +1,4 @@
-package com.geekgang.coupon.service;
+package com.geekbang.coupon.service;
 
 import com.geekbang.coupon.beans.ShoppingCart;
 import com.geekbang.coupon.beans.SimulationOrder;

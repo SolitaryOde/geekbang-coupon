@@ -1,4 +1,4 @@
-package com.geekgang.coupon;
+package com.geekbang.coupon;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
