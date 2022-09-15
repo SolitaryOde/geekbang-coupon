@@ -5,7 +5,6 @@ import com.geekbang.coupon.repository.entity.Coupon;
 import com.geekbang.coupon.beans.ShoppingCart;
 import com.geekbang.coupon.beans.SimulationOrder;
 import com.geekbang.coupon.beans.SimulationResponse;
-import com.geekbang.coupon.service.CouponCalculationService;
 import com.geekbang.coupon.beans.RequestCoupon;
 import com.geekbang.coupon.beans.SearchCoupon;
 import com.geekbang.coupon.enumes.CouponStatus;
@@ -13,7 +12,7 @@ import com.geekbang.coupon.converter.CouponConverter;
 import com.geekbang.coupon.service.CouponClientService;
 import com.geekbang.coupon.beans.CouponInfo;
 import com.geekbang.coupon.beans.CouponTemplateInfo;
-import com.geekbang.coupon.service.CouponTemplateService;
+import com.geekbang.coupon.supporter.WebClientSupporter;
 import com.google.common.collect.Lists;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -41,9 +40,7 @@ public class CouponClientServiceImpl implements CouponClientService {
 
     private final CouponRepository couponRepository;
 
-    private final CouponTemplateService couponTemplateService;
-
-    private final CouponCalculationService couponCalculationService;
+    private final WebClientSupporter webClientSupporter;
 
     /**
      * 领券接口
@@ -53,8 +50,8 @@ public class CouponClientServiceImpl implements CouponClientService {
      */
     @Override
     public CouponInfo requestCoupon(RequestCoupon request) {
-        CouponTemplateInfo templateInfo =
-                couponTemplateService.loadTemplateInfo(request.getCouponTemplateId());
+        String url = "http://coupon-template-serv/coupon/template/" + request.getCouponTemplateId();
+        CouponTemplateInfo templateInfo = webClientSupporter.sendGet(url, CouponTemplateInfo.class);
         // 模板不存在则报错
         if (templateInfo == null) {
             log.error("invalid template id={}", request.getCouponTemplateId());
@@ -113,12 +110,15 @@ public class CouponClientServiceImpl implements CouponClientService {
                     .orElseThrow(() -> new RuntimeException("Coupon not found"));
 
             CouponInfo couponInfo = CouponConverter.convertEntityToBean(coupon);
-            couponInfo.setTemplate(couponTemplateService.loadTemplateInfo(coupon.getTemplateId()));
+            String url = "http://coupon-template-serv/coupon/template/" + coupon.getTemplateId();
+            CouponTemplateInfo templateInfo = webClientSupporter.sendGet(url, CouponTemplateInfo.class);
+            couponInfo.setTemplate(templateInfo);
             cart.setCouponInfos(Lists.newArrayList(couponInfo));
         }
 
         // order清算
-        ShoppingCart checkoutInfo = couponCalculationService.calculateOrderPrice(cart);
+        String url = "http://coupon-calculation-serv/coupon/calculation";
+        ShoppingCart checkoutInfo = webClientSupporter.sendPost(url, cart, ShoppingCart.class);
 
         if (coupon != null) {
             // 如果优惠券没有被结算掉，而用户传递了优惠券，报错提示该订单满足不了优惠条件
@@ -159,13 +159,16 @@ public class CouponClientServiceImpl implements CouponClientService {
             if (couponOptional.isPresent()) {
                 Coupon coupon = couponOptional.get();
                 CouponInfo couponInfo = CouponConverter.convertEntityToBean(coupon);
-                couponInfo.setTemplate(couponTemplateService.loadTemplateInfo(coupon.getTemplateId()));
+                String url = "http://coupon-template-serv/coupon/template/" + coupon.getTemplateId();
+                CouponTemplateInfo templateInfo = webClientSupporter.sendGet(url, CouponTemplateInfo.class);
+                couponInfo.setTemplate(templateInfo);
                 couponInfos.add(couponInfo);
             }
         }
         order.setCouponInfos(couponInfos);
         // 调用接口试算服务
-        return couponCalculationService.simulateOrderPrice(order);
+        String url = "http://coupon-calculation-serv/coupon/calculation/simulation";
+        return webClientSupporter.sendPost(url, order, SimulationResponse.class);
     }
 
     /**
@@ -210,11 +213,15 @@ public class CouponClientServiceImpl implements CouponClientService {
         if (coupons.isEmpty()) {
             return Lists.newArrayList();
         }
-        List<Long> templateIds = coupons.stream()
+        String templateIds = coupons.stream()
                 .map(Coupon::getTemplateId)
-                .collect(Collectors.toList());
-        Map<Long, CouponTemplateInfo> templateMap = couponTemplateService.getTemplateInfoMap(templateIds);
-        coupons.forEach(e -> e.setTemplateInfo(templateMap.get(e.getTemplateId())));
+                .map(String::valueOf)
+                .collect(Collectors.joining(","));
+        String url = "http://coupon-template-serv/coupon/template/batch?ids=" + templateIds;
+        Map<Long, CouponTemplateInfo> templateMap = webClientSupporter.sendGet(url, Map.class);
+        if (!ObjectUtils.isEmpty(templateMap)) {
+            coupons.forEach(e -> e.setTemplateInfo(templateMap.get(e.getTemplateId())));
+        }
         return coupons.stream()
                 .map(CouponConverter::convertEntityToBean)
                 .collect(Collectors.toList());
