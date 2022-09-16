@@ -61,8 +61,23 @@ spring:
         # 如果只消费服务，不作为服务提供方，倒是可以设置成false，减少开销
         register-enabled: true
 
+feign:
+  client:
+    config:
+      # 全局超时配置
+      default:
+        # 网络连接阶段1秒超时
+        connectTimeout: 1000
+        # 服务请求响应阶段5秒超时
+        readTimeout: 5000
+      # 针对某个特定服务的超时配置
+      coupon-template-serv:
+        connectTimeout: 1000
+        readTimeout: 2000
+
 logging:
   level:
-    com.geekbang.coupon.client.repository: debug
+    com.geekbang.coupon.repository: debug
+    com.geekbang.coupon.feign: debug
 
 spring.output.ansi.enabled: always
