@@ -52,7 +52,7 @@ spring:
         # 文件中保存服务信息，当下次宕机启动时，会优先读取本地的配置对外提供服务。
         naming-load-cache-at-start: false
         # 命名空间ID，Nacos通过不同的命名空间来区分不同的环境，进行数据隔离，
-        #namespace: dev
+        namespace: develop
         # 创建不同的集群
         #cluster-name: Cluster-A
         # [注意]两个服务如果存在上下游调用关系，必须配置相同的group才能发起访问
