@@ -1,5 +1,6 @@
 package com.geekbang.coupon.supporter;
 
+import com.geekbang.coupon.constant.CommonConstant;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -23,6 +24,19 @@ public class WebClientSupporter {
         T response = webClientBuilder.build()
                 .get()
                 .uri(url)
+                .retrieve()
+                .bodyToMono(responseType)
+                .block();
+        log.info("WebClient GET end: url={}, response: {}", url, response);
+        return response;
+    }
+
+    public <T> T sendCanaryGet(String url, String trafficVersion, Class<T> responseType) {
+        log.info("WebClient GET start: url={}, responseType={}", url, responseType);
+        T response = webClientBuilder.build()
+                .get()
+                .uri(url)
+                .header(CommonConstant.TRAFFIC_VERSION, trafficVersion)
                 .retrieve()
                 .bodyToMono(responseType)
                 .block();

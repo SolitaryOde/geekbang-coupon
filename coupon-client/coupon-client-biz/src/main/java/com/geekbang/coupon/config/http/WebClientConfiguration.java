@@ -1,4 +1,4 @@
-package com.geekbang.coupon.config;
+package com.geekbang.coupon.config.http;
 
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;

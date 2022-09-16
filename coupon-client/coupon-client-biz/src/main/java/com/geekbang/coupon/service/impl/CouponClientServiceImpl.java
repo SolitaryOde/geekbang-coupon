@@ -51,7 +51,8 @@ public class CouponClientServiceImpl implements CouponClientService {
     @Override
     public CouponInfo requestCoupon(RequestCoupon request) {
         String url = "http://coupon-template-serv/coupon/template/" + request.getCouponTemplateId();
-        CouponTemplateInfo templateInfo = webClientSupporter.sendGet(url, CouponTemplateInfo.class);
+        CouponTemplateInfo templateInfo =
+                webClientSupporter.sendCanaryGet(url, request.getTrafficVersion(), CouponTemplateInfo.class);
         // 模板不存在则报错
         if (templateInfo == null) {
             log.error("invalid template id={}", request.getCouponTemplateId());

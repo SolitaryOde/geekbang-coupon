@@ -24,4 +24,6 @@ public class RequestCoupon {
     // 券模板ID
     @NotNull
     private Long couponTemplateId;
+
+    private String trafficVersion;
 }
