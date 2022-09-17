@@ -1,5 +1,6 @@
 package com.geekbang.coupon.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.geekbang.coupon.beans.ShoppingCart;
 import com.geekbang.coupon.beans.SimulationOrder;
 import com.geekbang.coupon.beans.SimulationResponse;
@@ -41,6 +42,7 @@ public class CouponClientController {
      * @return CouponInfo
      */
     @PostMapping
+    @SentinelResource(value = "request")
     public CouponInfo requestCoupon(@Valid @RequestBody RequestCoupon request) {
         if (disableCouponRequest) {
             log.info("暂停领券服务！");
@@ -56,6 +58,7 @@ public class CouponClientController {
      * @param couponId Long
      */
     @DeleteMapping("/{customerId}/{couponId}")
+    @SentinelResource(value = "delete")
     public void deleteCoupon(@PathVariable("customerId") Long customerId,
                              @PathVariable("couponId") Long couponId) {
         couponClientService.deleteCoupon(customerId, couponId);
@@ -68,6 +71,7 @@ public class CouponClientController {
      * @return SimulationResponse
      */
     @PostMapping("/simulation")
+    @SentinelResource
     public SimulationResponse simulate(@Valid @RequestBody SimulationOrder order) {
         return couponClientService.simulateOrderPrice(order);
     }
@@ -79,6 +83,7 @@ public class CouponClientController {
      * @return ShoppingCart
      */
     @PostMapping("/place")
+    @SentinelResource
     public ShoppingCart placeOrder(@Valid @RequestBody ShoppingCart cart) {
         return couponClientService.placeOrder(cart);
     }
@@ -90,6 +95,7 @@ public class CouponClientController {
      * @return List<CouponInfo>
      */
     @PostMapping("/list")
+    @SentinelResource
     public List<CouponInfo> findCoupon(@Valid @RequestBody SearchCoupon request) {
         return couponClientService.findCoupon(request);
     }

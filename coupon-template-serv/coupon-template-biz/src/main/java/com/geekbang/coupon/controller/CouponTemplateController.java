@@ -1,9 +1,11 @@
 package com.geekbang.coupon.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.geekbang.coupon.beans.CouponTemplateInfo;
 import com.geekbang.coupon.beans.PagedCouponTemplateInfo;
 import com.geekbang.coupon.beans.TemplateSearchParams;
 import com.geekbang.coupon.service.CouponTemplateService;
+import com.google.common.collect.Maps;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
@@ -33,6 +35,7 @@ public class CouponTemplateController {
      * @return CouponTemplateInfo
      */
     @PostMapping
+    @SentinelResource
     public CouponTemplateInfo addTemplate(@Valid @RequestBody CouponTemplateInfo couponTemplateInfo) {
         log.info("Create coupon template: data={}", couponTemplateInfo);
         return couponTemplateService.createTemplate(couponTemplateInfo);
@@ -45,6 +48,7 @@ public class CouponTemplateController {
      * @return CouponTemplateInfo
      */
     @PostMapping("/clone/{id}")
+    @SentinelResource
     public CouponTemplateInfo cloneTemplate(@PathVariable("id") Long id) {
         log.info("Clone coupon template: data={}", id);
         return couponTemplateService.cloneTemplate(id);
@@ -57,6 +61,7 @@ public class CouponTemplateController {
      * @return CouponTemplateInfo
      */
     @GetMapping("/{id}")
+    @SentinelResource(value = "get")
     public CouponTemplateInfo getTemplate(@PathVariable("id") Long id){
         log.info("Load template, id={}", id);
         return couponTemplateService.loadTemplateInfo(id);
@@ -69,9 +74,21 @@ public class CouponTemplateController {
      * @return Map<Long, CouponTemplateInfo>
      */
     @GetMapping("/batch")
+    @SentinelResource(blockHandler = "getTemplateInBatchBlock")
     public Map<Long, CouponTemplateInfo> getTemplateInBatch(@RequestParam("ids") Collection<Long> ids) {
         log.info("getTemplateInBatch: {}", ids);
         return couponTemplateService.getTemplateInfoMap(ids);
+    }
+
+    /**
+     * 批量获取限流方法
+     *
+     * @param ids Collection<Long>
+     * @return Map<Long, CouponTemplateInfo>
+     */
+    public Map<Long, CouponTemplateInfo> getTemplateInBatchBlock(Collection<Long> ids) {
+        log.info("接口被限流！");
+        return Maps.newHashMap();
     }
 
     /**
@@ -81,6 +98,7 @@ public class CouponTemplateController {
      * @return PagedCouponTemplateInfo
      */
     @PostMapping("/search")
+    @SentinelResource
     public PagedCouponTemplateInfo search(@Valid @RequestBody TemplateSearchParams searchParams) {
         log.info("search templates, payload={}", searchParams);
         return couponTemplateService.search(searchParams);
@@ -92,6 +110,7 @@ public class CouponTemplateController {
      * @param id 模版id
      */
     @DeleteMapping("/{id}")
+    @SentinelResource(value = "delete")
     public void deleteTemplate(@PathVariable("id") Long id){
         log.info("Load template, id={}", id);
         couponTemplateService.deleteTemplate(id);

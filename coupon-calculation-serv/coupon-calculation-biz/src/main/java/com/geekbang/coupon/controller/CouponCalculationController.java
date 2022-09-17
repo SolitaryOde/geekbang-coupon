@@ -1,5 +1,6 @@
 package com.geekbang.coupon.controller;
 
+import com.alibaba.csp.sentinel.annotation.SentinelResource;
 import com.geekbang.coupon.beans.ShoppingCart;
 import com.geekbang.coupon.beans.SimulationOrder;
 import com.geekbang.coupon.beans.SimulationResponse;
@@ -32,6 +33,7 @@ public class CouponCalculationController {
      * @return 结算结果
      */
     @PostMapping
+    @SentinelResource
     public ShoppingCart calculateOrderPrice(@RequestBody ShoppingCart shoppingCart) {
         log.info("do calculation: {}", shoppingCart);
         return couponCalculationService.calculateOrderPrice(shoppingCart);
@@ -45,6 +47,7 @@ public class CouponCalculationController {
      * @return 试算结果
      */
     @PostMapping("/simulation")
+    @SentinelResource
     public SimulationResponse simulate(@RequestBody SimulationOrder simulationOrder) {
         log.info("do simulation: {}", simulationOrder);
         return couponCalculationService.simulateOrderPrice(simulationOrder);
