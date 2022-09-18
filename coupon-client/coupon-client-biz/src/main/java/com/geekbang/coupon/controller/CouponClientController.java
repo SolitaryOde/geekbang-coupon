@@ -71,7 +71,7 @@ public class CouponClientController {
      * @return SimulationResponse
      */
     @PostMapping("/simulation")
-    @SentinelResource
+    @SentinelResource(value = "simulate")
     public SimulationResponse simulate(@Valid @RequestBody SimulationOrder order) {
         return couponClientService.simulateOrderPrice(order);
     }
@@ -83,7 +83,7 @@ public class CouponClientController {
      * @return ShoppingCart
      */
     @PostMapping("/place")
-    @SentinelResource
+    @SentinelResource(value = "place")
     public ShoppingCart placeOrder(@Valid @RequestBody ShoppingCart cart) {
         return couponClientService.placeOrder(cart);
     }
@@ -95,7 +95,7 @@ public class CouponClientController {
      * @return List<CouponInfo>
      */
     @PostMapping("/list")
-    @SentinelResource
+    @SentinelResource(value = "list")
     public List<CouponInfo> findCoupon(@Valid @RequestBody SearchCoupon request) {
         return couponClientService.findCoupon(request);
     }

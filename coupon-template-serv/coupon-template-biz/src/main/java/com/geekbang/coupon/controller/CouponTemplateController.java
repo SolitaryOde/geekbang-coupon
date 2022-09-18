@@ -1,6 +1,7 @@
 package com.geekbang.coupon.controller;
 
 import com.alibaba.csp.sentinel.annotation.SentinelResource;
+import com.alibaba.csp.sentinel.slots.block.BlockException;
 import com.geekbang.coupon.beans.CouponTemplateInfo;
 import com.geekbang.coupon.beans.PagedCouponTemplateInfo;
 import com.geekbang.coupon.beans.TemplateSearchParams;
@@ -35,7 +36,7 @@ public class CouponTemplateController {
      * @return CouponTemplateInfo
      */
     @PostMapping
-    @SentinelResource
+    @SentinelResource(value = "add")
     public CouponTemplateInfo addTemplate(@Valid @RequestBody CouponTemplateInfo couponTemplateInfo) {
         log.info("Create coupon template: data={}", couponTemplateInfo);
         return couponTemplateService.createTemplate(couponTemplateInfo);
@@ -48,7 +49,7 @@ public class CouponTemplateController {
      * @return CouponTemplateInfo
      */
     @PostMapping("/clone/{id}")
-    @SentinelResource
+    @SentinelResource(value = "clone")
     public CouponTemplateInfo cloneTemplate(@PathVariable("id") Long id) {
         log.info("Clone coupon template: data={}", id);
         return couponTemplateService.cloneTemplate(id);
@@ -74,7 +75,7 @@ public class CouponTemplateController {
      * @return Map<Long, CouponTemplateInfo>
      */
     @GetMapping("/batch")
-    @SentinelResource(blockHandler = "getTemplateInBatchBlock")
+    @SentinelResource(value = "batch", blockHandler = "getTemplateInBatchBlock")
     public Map<Long, CouponTemplateInfo> getTemplateInBatch(@RequestParam("ids") Collection<Long> ids) {
         log.info("getTemplateInBatch: {}", ids);
         return couponTemplateService.getTemplateInfoMap(ids);
@@ -84,10 +85,11 @@ public class CouponTemplateController {
      * 批量获取限流方法
      *
      * @param ids Collection<Long>
+     * @param e BlockException
      * @return Map<Long, CouponTemplateInfo>
      */
-    public Map<Long, CouponTemplateInfo> getTemplateInBatchBlock(Collection<Long> ids) {
-        log.info("接口被限流！");
+    public Map<Long, CouponTemplateInfo> getTemplateInBatchBlock(Collection<Long> ids, BlockException e) {
+        log.info("接口被限流: {}", e.getMessage());
         return Maps.newHashMap();
     }
 
@@ -98,7 +100,7 @@ public class CouponTemplateController {
      * @return PagedCouponTemplateInfo
      */
     @PostMapping("/search")
-    @SentinelResource
+    @SentinelResource(value = "search")
     public PagedCouponTemplateInfo search(@Valid @RequestBody TemplateSearchParams searchParams) {
         log.info("search templates, payload={}", searchParams);
         return couponTemplateService.search(searchParams);

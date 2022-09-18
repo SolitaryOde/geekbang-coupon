@@ -33,7 +33,7 @@ public class CouponCalculationController {
      * @return 结算结果
      */
     @PostMapping
-    @SentinelResource
+    @SentinelResource(value = "calculate")
     public ShoppingCart calculateOrderPrice(@RequestBody ShoppingCart shoppingCart) {
         log.info("do calculation: {}", shoppingCart);
         return couponCalculationService.calculateOrderPrice(shoppingCart);
@@ -47,7 +47,7 @@ public class CouponCalculationController {
      * @return 试算结果
      */
     @PostMapping("/simulation")
-    @SentinelResource
+    @SentinelResource(value = "simulate")
     public SimulationResponse simulate(@RequestBody SimulationOrder simulationOrder) {
         log.info("do simulation: {}", simulationOrder);
         return couponCalculationService.simulateOrderPrice(simulationOrder);
