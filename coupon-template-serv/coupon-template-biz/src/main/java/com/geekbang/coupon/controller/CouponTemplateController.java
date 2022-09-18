@@ -75,21 +75,37 @@ public class CouponTemplateController {
      * @return Map<Long, CouponTemplateInfo>
      */
     @GetMapping("/batch")
-    @SentinelResource(value = "batch", blockHandler = "getTemplateInBatchBlock")
+    @SentinelResource(value = "batch", blockHandler = "getTemplateInBatchBlock",
+            fallback = "getTemplateInBatchFallback")
     public Map<Long, CouponTemplateInfo> getTemplateInBatch(@RequestParam("ids") Collection<Long> ids) {
         log.info("getTemplateInBatch: {}", ids);
+        if (ids.contains(222L)) {
+            throw new RuntimeException("熔断测试");
+        }
         return couponTemplateService.getTemplateInfoMap(ids);
     }
 
     /**
-     * 批量获取限流方法
+     * 熔断或限流方法
      *
      * @param ids Collection<Long>
      * @param e BlockException
      * @return Map<Long, CouponTemplateInfo>
      */
     public Map<Long, CouponTemplateInfo> getTemplateInBatchBlock(Collection<Long> ids, BlockException e) {
-        log.info("接口被限流: {}", e.getMessage());
+        log.info("接口被熔断或限流: {}", e.getMessage());
+        e.printStackTrace();
+        return Maps.newHashMap();
+    }
+
+    /**
+     * 接口异常回调
+     *
+     * @param ids Collection<Long>
+     * @return Map<Long, CouponTemplateInfo>
+     */
+    public Map<Long, CouponTemplateInfo> getTemplateInBatchFallback(Collection<Long> ids) {
+        log.info("接口产生异常！");
         return Maps.newHashMap();
     }
 
